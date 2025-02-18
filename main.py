@@ -2,9 +2,13 @@ def menu()-> None:
     while True:
         op = input("Ingrese una opción: ")
         if op == "a":
-            importar_datos()
+            cantidad = importar_datos(archivo_csv)
+            if cantidad:
+                print("archivo cargado con exito!!")
+                print(f"La cantidad de universisdades es: {cantidad}")
         elif op == "b":
-            buscar_universidad()
+            nombre = input("Ingrese nombre o parte del nombre: ")
+            buscar_universidad(nombre)
         elif op == "c":
             exportar_alumnos()
         elif op == "d":
@@ -15,10 +19,11 @@ def menu()-> None:
         else:
             print("Opción incorrecta")
 
-def importar_datos():
+def importar_datos(archivo_csv):
     """
     importa los datos de las lineas que contengan la palabra universidad
-    y la guarda en un JSON
+    y la guarda en un csv.
+    Cuenta la cantidad de universidades.
 
     pre: recive una direccion como parametro
 
@@ -26,10 +31,13 @@ def importar_datos():
     """
     universidades = []
     contador = 0
+    
     try:    
-        with open("./mujeres_programadoras_27032018.csv", "r", encoding= "utf-8") as archivo:
+        with open("archivo_csv", "r", encoding= "utf-8") as entrada:
+            encabezado = entrada.readline().strip()
+
             while True:
-                linea = archivo.readline()
+                linea = entrada.readline()
                 if not linea:
                     break
                 columnas = linea.strip().split(",")
@@ -38,20 +46,40 @@ def importar_datos():
                     universidades.append(columnas)
                     contador += 1
 
-        return contador   
+        with open("./unviersidades.csv", "w", encoding="utf-8") as salida:
+            salida.write(encabezado)
+            for filas in universidades:
+                fila = ",".join(filas)
+                salida.write(fila + "\n")
+
+        return contador
     except FileNotFoundError:
-        print("Archivo no encontrado..")
+        print("entrada no encontrado..")
  
 
 
-def buscar_universidad():
-    pass
+def buscar_universidad(nombre):
+    """
+    Busca por nombre todas las universidades que coincidan con el nombre ingresado
+
+    pre: recibe un string
+
+    post: devuelve None
+    """
+    try:
+        
+
+    except FileNotFoundError:
+        print("Archivo no encontrado...")
 
 def exportar_alumnos():
     pass
 
 def mujeres_egresadas():
     pass
+
+
+archivo_csv = "./mujeres_programadoras.csv"
 
 menu()
 
