@@ -33,8 +33,6 @@ def importar_datos():
                 if not linea:
                     break
                 columnas = linea.strip().split(",")
-                
-                print(columnas[2])
 
                 if columnas[2].startswith("Universidad"):
                     universidades.append(columnas)
