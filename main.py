@@ -1,3 +1,6 @@
+import json
+
+
 def menu()-> None:
     while True:
         op = input("Ingrese una opción: ")
@@ -31,10 +34,13 @@ def importar_datos(archivo_csv):
     """
     universidades = []
     contador = 0
+    datos_uni = {}
     
     try:    
-        with open("archivo_csv", "r", encoding= "utf-8") as entrada:
-            encabezado = entrada.readline().strip()
+        with open(archivo_csv, "r", encoding= "utf-8") as entrada:
+            linea_uno = entrada.readline()
+            
+            encabezado = linea_uno.strip().split(",")
 
             while True:
                 linea = entrada.readline()
@@ -45,16 +51,35 @@ def importar_datos(archivo_csv):
                 if columnas[2].startswith("Universidad"):
                     universidades.append(columnas)
                     contador += 1
+            
+            for indice, columna in enumerate(encabezado):
+                lista = []
+                for fila in universidades:
+                    lista.append(fila[indice])
 
-        with open("./unviersidades.csv", "w", encoding="utf-8") as salida:
+                datos_uni[columna] = lista
+
+    except FileNotFoundError:
+        print("archivo no encontrado..")
+
+    
+    
+    try:        
+        with open("./universidades.JSON", "w", encoding="utf-8") as uni_json:
+            json.dumps(datos_uni)
+    
+    except FileNotFoundError:    
+        print("El archivo no existe...") 
+
+        """with open("./unviersidades.csv", "w", encoding="utf-8") as salida:
             salida.write(encabezado)
             for filas in universidades:
                 fila = ",".join(filas)
                 salida.write(fila + "\n")
+        """
 
-        return contador
-    except FileNotFoundError:
-        print("entrada no encontrado..")
+    return contador
+    
  
 
 
@@ -66,11 +91,7 @@ def buscar_universidad(nombre):
 
     post: devuelve None
     """
-    try:
-        
-
-    except FileNotFoundError:
-        print("Archivo no encontrado...")
+    pass
 
 def exportar_alumnos():
     pass
@@ -79,7 +100,7 @@ def mujeres_egresadas():
     pass
 
 
-archivo_csv = "./mujeres_programadoras.csv"
+archivo_csv = "mujeres_programadoras_27032018.csv"
 
 menu()
 
